@@ -1,4 +1,3 @@
-// Create styles
 type Experience = {
   title: string;
   company: string;
