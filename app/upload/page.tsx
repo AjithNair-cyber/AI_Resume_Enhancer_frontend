@@ -1,7 +1,7 @@
 "use client";
 import ResumeTemplate from "@/components/ResumeTemplate";
 import { uploadResume } from "@/functions/apiFunctions";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
 import { Button } from "flowbite-react";
 import React, { useState } from "react";
 
@@ -43,6 +43,7 @@ const UploadPage = () => {
       setError(null);
     } catch (error) {
       setError("Failed to upload resume. Please try again.");
+      console.log(error);
       setEnhancedResume(null);
     }
     setLoading(false);
