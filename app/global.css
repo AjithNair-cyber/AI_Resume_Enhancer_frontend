@@ -1,1 +1,30 @@
-@import "tailwindcss"
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+
+@theme{
+    --color-primary:#03346E;
+    --color-secondary: #28affc;
+    --color-lightNavbar: #8DD8FF;
+    --color-lightContainer: #ebfafc;
+    --color-bgLight: #e6effa;
+    --color-primaryDark: #e6effa;
+    --color-secondaryDark: #6EACDA;
+    --color-darkContainer: #042847;
+    --color-bgDark: #021526;
+}
+
+@theme inline {
+    --animate-pulse:pulse var(--duration) ease-out infinite;
+  @keyframes pulse {
+  0%, 100% {
+    boxShadow:0 0 0 0 var(--pulse-color);
+        }
+  50% {
+    boxShadow:0 0 0 8px var(--pulse-color);
+        }
+    }
+}

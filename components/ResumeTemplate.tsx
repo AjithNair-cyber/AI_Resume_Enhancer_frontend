@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     marginBottom: 20,
     marginTop: 10,
   },
@@ -155,11 +155,11 @@ const ResumeTemplate = (props: ResumeData) => {
           </View>
         )}
         {props.education.length > 0 && (
-          <View style={styles.sectionMargin} wrap={false}>
+          <View style={styles.sectionMargin}>
             <Text style={styles.sectionHeader}>Education</Text>
             <View style={styles.horizontalRuleSection} />
             {props.education.map((edu, index) => (
-              <View key={index} style={styles.sectionListMargin}>
+              <View key={index} style={styles.sectionListMargin} wrap={false}>
                 <Text style={styles.companyExperience}>
                   {edu.degree} from {edu.institution}
                 </Text>
@@ -177,11 +177,11 @@ const ResumeTemplate = (props: ResumeData) => {
           </View>
         )}
         {props.projects.length > 0 && (
-          <View style={styles.sectionMarginList} wrap={false}>
+          <View style={styles.sectionMarginList}>
             <Text style={styles.sectionHeader}>Projects</Text>
             <View style={styles.horizontalRuleSection} />
             {props.projects.map((project, index) => (
-              <View key={index} style={styles.sectionListMargin}>
+              <View key={index} style={styles.sectionListMargin} wrap={false}>
                 <Text style={styles.companyExperience}>{project.title}</Text>
                 {Array.isArray(project.description) &&
                   project.description.map((desc, descIndex) => (

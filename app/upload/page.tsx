@@ -2,6 +2,7 @@
 import ResumeTemplate from "@/components/ResumeTemplate";
 import { uploadResume } from "@/functions/apiFunctions";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { Button } from "flowbite-react";
 import React, { useState } from "react";
 
 const UploadPage = () => {
@@ -47,7 +48,7 @@ const UploadPage = () => {
     setLoading(false);
   };
   return (
-    <div>
+    <div className="">
       <h1>Upload Page</h1>
       <center>
         <form onSubmit={handleSubmit}>
@@ -75,12 +76,9 @@ const UploadPage = () => {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="hover:bg-green-300 bg-green-100 rounded-md p-5"
-          >
+          <Button className="bg-blue-600 pl-8 pr-8 pt-6 pb-6" type="submit">
             Upload
-          </button>
+          </Button>
           {loading && <p className="text-green-500">Uploading...</p>}
           <div>
             {!loading && !error && enhancedResume && (
