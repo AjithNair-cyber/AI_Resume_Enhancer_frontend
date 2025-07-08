@@ -3,7 +3,6 @@
 import { Button } from "flowbite-react";
 import Resume from "../public/eb2619e1-9aa5-4aaf-860f-146515ab2279_pages-to-jpg-0001.jpg";
 import { SparklesText } from "./magicui/sparkles-text";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function HeroSection() {
