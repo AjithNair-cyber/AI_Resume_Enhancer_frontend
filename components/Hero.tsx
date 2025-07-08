@@ -5,11 +5,8 @@ import Resume from "../public/eb2619e1-9aa5-4aaf-860f-146515ab2279_pages-to-jpg-
 import { SparklesText } from "./magicui/sparkles-text";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PulsatingButton } from "./magicui/pulsating-button";
 
 export default function HeroSection() {
-  const router = useRouter();
-
   return (
     <div className="flex md:flex-row flex-col gap-10">
       <div className="ml-4 flex-1">
