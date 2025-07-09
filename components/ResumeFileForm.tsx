@@ -360,7 +360,7 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                       <label className="text-xl pb-4 font-medium">
                         Education
                       </label>
-                      {values.education.map((ed, index) => (
+                      {values.education.map((_, index) => (
                         <div
                           key={index}
                           className="border p-4 rounded space-y-2 mb-4 shadow-md"
@@ -402,6 +402,13 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                               />
                             </div>
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-red-500"
+                          >
+                            Remove Education
+                          </button>
                         </div>
                       ))}
                       <button
@@ -423,6 +430,7 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                     </div>
                   )}
                 </FieldArray>
+
                 {/* Repeat same for projects, education, certifications, hobbies, languages */}
               </div>
             </div>
@@ -436,7 +444,7 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                       <label className="text-xl pb-4 font-medium">
                         Certifications
                       </label>
-                      {values.certifications.map((cert, index) => (
+                      {values.certifications.map((_, index) => (
                         <div
                           key={index}
                           className="border p-4 rounded space-y-2 mb-4 shadow-md"
@@ -478,6 +486,13 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                               />
                             </div>
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-red-500"
+                          >
+                            Remove Certification
+                          </button>
                         </div>
                       ))}
                       <button
