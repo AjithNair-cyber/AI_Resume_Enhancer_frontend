@@ -8,6 +8,7 @@ import ResumeUploadForm from "@/components/ResumeFileForm";
 const UploadPage = () => {
   const [enhancedResume, setEnhancedResume] = useState<ResumeData | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const initialValues: ResumeFormValues = {
@@ -27,11 +28,15 @@ const UploadPage = () => {
     // Submit logic here...
 
     try {
+      setLoading(true);
       const data = await uploadResume(formData);
       setEnhancedResume(data);
+      setLoading(false);
     } catch (err) {
+      setLoading(true);
       setEnhancedResume(null);
       console.log(err);
+      setLoading(false);
     }
 
     actions.setSubmitting(false);
@@ -76,6 +81,7 @@ const UploadPage = () => {
                     id="resume"
                     name="resume"
                     type="file"
+                    disabled={loading}
                     ref={fileInputRef}
                     accept=".pdf"
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +106,7 @@ const UploadPage = () => {
                 <Button
                   className="bg-blue-600 pl-8 pr-8 pt-6 pb-6 "
                   type="submit"
+                  disabled={loading}
                 >
                   Submit
                 </Button>
