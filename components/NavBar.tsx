@@ -7,7 +7,8 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
-import Link from "next/link";
+import Image from "next/image";
+import LogoImage from "../public/logo.png";
 
 export function NavbarComponent() {
   return (
@@ -15,7 +16,9 @@ export function NavbarComponent() {
       fluid
       className="dark:bg-bgDark border-b-1 border-white bg-lightContainer mb-12"
     >
-      <NavbarBrand as={Link} href="https://flowbite-react.com"></NavbarBrand>
+      <NavbarBrand>
+        <Image src={LogoImage.src} alt="logo" width={200} height={80} />
+      </NavbarBrand>
       <NavbarToggle />
       <NavbarCollapse>
         <NavbarLink href="/">Home</NavbarLink>

@@ -13,6 +13,7 @@ export default function RootLayout({
       className="bg-linear-to-r from-bgLight to-lightContainer dark:bg-linear-to-r dark:from-darkContainer dark:to-bgDark dark:text-white text-primary"
     >
       <head>
+        <title>AI Resume Enhancer</title>
         <ThemeModeScript />
       </head>
       <body>

@@ -13,13 +13,14 @@ export default function HeroSection() {
           Get Hired Faster with
         </h1>
         <p className=" text-blue-600 dark:text-primaryDark md:text-7xl text-5xl font-bold text-center">
-          AI-Powered Resume
+          AI-Enhanced Resume
         </p>
         <p className="text-primary leading-snug font-semibold dark:text-secondaryDark mt-4 md:text-2xl text-xl text-center">
-          Enhance your resume with GPT-trained AI keyword optimization,
+          Enter your dream job or job description and enhance your resume with
+          tailor made
         </p>
         <p className="text-primary font-semibold dark:text-secondaryDark md:text-2xl text-xl text-center">
-          formatting, and skill alignment in seconds.
+          professional summary and skills
         </p>
         <div className="mt-6 flex justify-center gap-4">
           <Link href="/upload">
@@ -33,7 +34,7 @@ export default function HeroSection() {
         <center>
           <SparklesText>
             {" "}
-            <img src={Resume.src} className="w-1/2" />
+            <img src={Resume.src} className="w-1/2 shadow-2xl" />
           </SparklesText>
         </center>
       </div>
