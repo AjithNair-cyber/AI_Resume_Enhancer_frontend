@@ -1,7 +1,8 @@
 type Experience = {
   title: string;
   company: string;
-  dates: string;
+  start_date: string;
+  end_date: string;
   description: string[];
 };
 
@@ -14,16 +15,23 @@ type Project = {
 type Education = {
   institution: string;
   degree: string;
-  dates: string;
+  start_date: string;
+  end_date : string;
   cgpa?: string;
   percentage?: string;
 };
 
 type Certification = {
   title: string;
-  date : string;
+  start_date : string;
+  end_date: string;
   organization: string;
 }
+
+type ResumeFormValues = {
+  job: string;
+  resume: File | null;
+};
 
 type ResumeData = {
   name: string;

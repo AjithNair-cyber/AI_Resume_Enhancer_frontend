@@ -131,7 +131,9 @@ const ResumeTemplate = (props: ResumeData) => {
                 <Text style={styles.companyExperience}>
                   {exp.title} at {exp.company}
                 </Text>
-                <Text style={styles.dateStyle}>{exp.dates}</Text>
+                <Text style={styles.dateStyle}>
+                  {exp.start_date}/{exp.end_date}
+                </Text>
                 {exp.description.map((desc, descIndex) => (
                   <Text key={descIndex} style={styles.listStyle}>
                     {` • ${desc}`}
@@ -163,7 +165,9 @@ const ResumeTemplate = (props: ResumeData) => {
                 <Text style={styles.companyExperience}>
                   {edu.degree} from {edu.institution}
                 </Text>
-                <Text style={styles.dateStyle}>{edu.dates}</Text>
+                <Text style={styles.dateStyle}>
+                  {edu.start_date}/{edu.end_date}
+                </Text>
                 {edu.cgpa && (
                   <Text style={styles.listStyle}>CGPA: {edu.cgpa}</Text>
                 )}
@@ -206,7 +210,8 @@ const ResumeTemplate = (props: ResumeData) => {
                   {certification.title}
                 </Text>
                 <Text style={styles.dateStyle}>
-                  {certification.organization} / {certification.date}
+                  {certification.organization} : {certification.start_date}/
+                  {certification.end_date}
                 </Text>
               </View>
             ))}
