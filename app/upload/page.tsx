@@ -2,14 +2,17 @@
 import { uploadResume } from "@/functions/apiFunctions";
 import { Button } from "flowbite-react";
 import React, { useState, useRef } from "react";
-import { FormikHelpers, Formik, Form, Field } from "formik";
+import { FormikHelpers, Formik, Form, Field, ErrorMessage } from "formik";
 import ResumeUploadForm from "@/components/ResumeFileForm";
+import * as Yup from "yup";
+import Loader from "@/components/Loader";
 
 const UploadPage = () => {
   const [enhancedResume, setEnhancedResume] = useState<ResumeData | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [errorFileMessage, setErrorFileMessage] = useState<string>("");
 
   const initialValues: ResumeFormValues = {
     job: "",
@@ -22,9 +25,17 @@ const UploadPage = () => {
   ) => {
     const formData = new FormData();
     formData.append("job", values.job);
-    if (resumeFile) {
-      formData.append("resume", resumeFile);
+
+    if (!resumeFile) {
+      setErrorFileMessage("Please upload a file");
+      return;
     }
+    if (resumeFile?.type !== "application/pdf") {
+      console.log(resumeFile?.type);
+      setErrorFileMessage("Please upload a file with valid file type (.pdf)");
+      return;
+    }
+    formData.append("resume", resumeFile);
     // Submit logic here...
 
     try {
@@ -42,10 +53,20 @@ const UploadPage = () => {
     actions.setSubmitting(false);
   };
 
+  const validationSchema = Yup.object().shape({
+    job: Yup.string()
+      .min(4, "Job description must be at least 4 characters long")
+      .required("Job description is required"),
+    resume: Yup.mixed().required("Resume is required"),
+  });
   return (
     <div>
       {!enhancedResume && (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
           {({ setFieldValue }) => (
             <Form className="w-7/8 mx-auto p-12 bg-white dark:bg-slate-800 rounded shadow space-y-6">
               <h1 className="text-2xl font-bold">Upload Resume</h1>
@@ -63,6 +84,11 @@ const UploadPage = () => {
                     className="w-full border p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
                     rows={4}
                     minLength={4}
+                  />
+                  <ErrorMessage
+                    name="job"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
                   />
                 </div>
 
@@ -88,15 +114,26 @@ const UploadPage = () => {
                       const file = event.currentTarget.files?.[0] || null;
                       setResumeFile(file);
                       setFieldValue("resume", file);
+                      setErrorFileMessage("");
                     }}
                     className="hidden"
                   />
-
+                  <ErrorMessage
+                    name="resume"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                   {resumeFile && (
                     <div className="text-sm ">
                       Selected:{" "}
                       <span className="font-medium">{resumeFile.name}</span>
                     </div>
+                  )}
+
+                  {errorFileMessage && (
+                    <span className="text-sm text-red-600">
+                      {errorFileMessage}
+                    </span>
                   )}
                 </div>
               </div>
@@ -108,7 +145,8 @@ const UploadPage = () => {
                   type="submit"
                   disabled={loading}
                 >
-                  Submit
+                  {loading && <Loader />}
+                  {!loading && <p>Submit </p>}
                 </Button>
               </div>
             </Form>
