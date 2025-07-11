@@ -1,6 +1,7 @@
 import { NavbarComponent } from "@/components/NavBar";
 import "./global.css";
 import { ThemeModeScript } from "flowbite-react";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function RootLayout({
   children,
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body>
         <NavbarComponent />
         {children}
+        <Analytics />
       </body>
     </html>
   );
