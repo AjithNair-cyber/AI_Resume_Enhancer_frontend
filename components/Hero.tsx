@@ -4,6 +4,7 @@ import { Button } from "flowbite-react";
 import Resume from "../public/eb2619e1-9aa5-4aaf-860f-146515ab2279_pages-to-jpg-0001.jpg";
 import { SparklesText } from "./magicui/sparkles-text";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HeroSection() {
   return (
@@ -34,7 +35,11 @@ export default function HeroSection() {
         <center>
           <SparklesText>
             {" "}
-            <img src={Resume.src} className="w-1/2 shadow-2xl" />
+            <Image
+              src={Resume.src}
+              alt="Resume Image"
+              className="w-1/2 shadow-2xl"
+            />
           </SparklesText>
         </center>
       </div>
