@@ -9,8 +9,11 @@ import {
 } from "flowbite-react";
 import Image from "next/image";
 import LogoImage from "../public/logo.png";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export function NavbarComponent() {
+export default function NavbarComponent() {
+  const { status } = useSession();
+
   return (
     <Navbar
       fluid
@@ -23,6 +26,18 @@ export function NavbarComponent() {
       <NavbarCollapse>
         <NavbarLink href="/">Home</NavbarLink>
         <NavbarLink href="upload">Upload</NavbarLink>
+        {status == "unauthenticated" ? (
+          <NavbarLink className="hover:cursor-pointer" onClick={() => signIn()}>
+            Login
+          </NavbarLink>
+        ) : (
+          <NavbarLink
+            className="hover:cursor-pointer"
+            onClick={() => signOut()}
+          >
+            Logout
+          </NavbarLink>
+        )}
       </NavbarCollapse>
     </Navbar>
   );
