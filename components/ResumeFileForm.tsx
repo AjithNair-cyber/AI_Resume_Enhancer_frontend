@@ -37,6 +37,7 @@ const initialResumeData: ResumeData = {
 };
 
 const ResumeUploadForm = (resume: ResumeData | null) => {
+  console.log("ENHANCED RESUME ", resume);
   const initialValues: ResumeData = resume || initialResumeData;
   const [step, setSteps] = useState<number>(1);
   const [downloadResume, setDownloadResume] = useState<ResumeData | null>(null);

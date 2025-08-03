@@ -1,4 +1,6 @@
-import axiosInstance from "../config/axios-instance";
+import getAxiosClient from "@/config/axios-instance";
+
+const axiosInstance = getAxiosClient();
 
 export const getHello = async (): Promise<{ message: string }> => {
   try {
@@ -16,5 +18,5 @@ export const uploadResume = async (formdata: FormData): Promise<ResumeData> => {
       "Content-Type": "multipart/form-data",
     },
   });
-  return response.data;
+  return response.data?.data;
 };
