@@ -6,6 +6,7 @@ import ResumeTemplate from "./ResumeTemplate";
 import Link from "next/link";
 import * as Yup from "yup";
 import { saveResume } from "@/functions/apiFunctions";
+import { toast } from "react-toastify";
 
 const initialResumeData: ResumeData = {
   name: "",
@@ -42,7 +43,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
   const [step, setSteps] = useState<number>(1);
   const [downloadResume, setDownloadResume] = useState<ResumeData | null>(null);
   const [stepError, setStepError] = useState<string>("");
-  const [error, setError] = useState<string>("");
   const [save, setSave] = useState<boolean>(false);
 
   const validationSchema = Yup.object().shape({
@@ -135,13 +135,15 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
   const handleSave = async () => {
     try {
       await saveResume(downloadResume || initialValues);
+      toast.success("Resume saved successfully!");
       setSave(true);
     } catch (err) {
       if (typeof err === "object" && err !== null && "response" in err) {
         // @ts-expect-error: err.response may exist if this is an Axios error
-        setError(err.response?.data?.data);
+        toast.error(err.response?.data?.data);
+        // setError(err.response?.data?.data);
       } else {
-        setError(err instanceof Error ? err.message : "Signup failed");
+        toast.error("Save failed");
       }
     }
   };
@@ -912,7 +914,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
 
               {downloadResume && (
                 <div className="flex flex-col  w-full justify-center items-center gap-12 mt-6">
-                  {error && <p className="text-red-500 mb-4">{error}</p>}
                   <PDFDownloadLink
                     document={<ResumeTemplate {...downloadResume} />}
                     fileName={`Resume ${initialValues.name}`}

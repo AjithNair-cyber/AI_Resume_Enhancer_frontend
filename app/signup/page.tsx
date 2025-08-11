@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { signUp } from "@/functions/apiFunctions";
 import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
+import { Button } from "flowbite-react";
 
 const SignupPage = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
-
   const initialValues: SignupFormValues = { name: "", email: "", password: "" };
 
   const validationSchema = Yup.object({
@@ -24,7 +23,6 @@ const SignupPage = () => {
   });
 
   const handleSubmit = async (values: SignupFormValues) => {
-    setError("");
     try {
       // Send values to your backend here
       await signUp(values);
@@ -36,9 +34,10 @@ const SignupPage = () => {
     } catch (err) {
       if (typeof err === "object" && err !== null && "response" in err) {
         // @ts-expect-error: err.response may exist if this is an Axios error
-        setError(err.response?.data?.data);
+        // setError(err.response?.data?.data);
+        toast.error(err.response?.data?.data);
       } else {
-        setError(err instanceof Error ? err.message : "Signup failed");
+        toast.error("Signup failed");
       }
     }
   };
@@ -47,8 +46,6 @@ const SignupPage = () => {
     <div className="flex justify-center">
       <div className="bg-white dark:bg-slate-800 p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <Formik
           initialValues={initialValues}
@@ -103,13 +100,14 @@ const SignupPage = () => {
               </div>
 
               {/* Submit */}
-              <button
+              <Button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
               >
-                {isSubmitting ? "Signing up..." : "Sign Up"}
-              </button>
+                {isSubmitting && <Loader />}
+                {!isSubmitting && "Sign Up"}
+              </Button>
             </Form>
           )}
         </Formik>
