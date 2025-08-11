@@ -2,24 +2,26 @@
 
 import { useSession } from "next-auth/react";
 import Loader from "../Loader";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { status } = useSession();
   const router = useRouter();
-  const location =
-    typeof window !== "undefined" ? window.location.pathname : "";
+  const location = usePathname();
+  useEffect(() => {
+    // If the user is unauthenticated and not on the login page, redirect
+    if (
+      status === "unauthenticated" &&
+      location !== "/api/auth/signin" &&
+      location !== "/"
+    ) {
+      router.push("/api/auth/signin");
+    }
+  }, [status, location, router]);
 
-  // If the user is on the login page, do not redirect
-  if (location === "/api/auth/signin" || location === "/") {
-    return <>{children}</>;
-  }
   if (status === "loading") {
     return <Loader />;
-  }
-  if (status === "unauthenticated") {
-    router.push("/api/auth/signin");
-    return null; // Prevent rendering children while redirecting
   }
 
   return <>{children}</>;
