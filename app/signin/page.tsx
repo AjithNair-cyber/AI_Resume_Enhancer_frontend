@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -16,7 +14,6 @@ interface LoginFormValues {
 
 const LoginPage = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
 
   const initialValues: LoginFormValues = { email: "", password: "" };
 
@@ -28,8 +25,6 @@ const LoginPage = () => {
   });
 
   const handleSubmit = async (values: LoginFormValues) => {
-    setError("");
-
     const res = await signIn("credentials", {
       redirect: false,
       email: values.email,
@@ -37,7 +32,7 @@ const LoginPage = () => {
     });
 
     if (res?.error) {
-      setError("Invalid email or password");
+      toast.error("Invalid email or password");
     } else {
       toast.success("Login successful!");
       // Redirect to upload page after successful login
@@ -51,8 +46,6 @@ const LoginPage = () => {
     <div className="flex justify-center ">
       <div className="bg-white dark:bg-slate-800 p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <Formik
           initialValues={initialValues}

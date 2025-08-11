@@ -31,7 +31,7 @@ export default function RootLayout({
           <Analytics />
           <ToastContainer
             position="bottom-center"
-            autoClose={700}
+            autoClose={1000}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick={false}
