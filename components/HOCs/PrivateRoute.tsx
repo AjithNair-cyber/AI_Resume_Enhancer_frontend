@@ -9,14 +9,26 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { status } = useSession();
   const router = useRouter();
   const location = usePathname();
+
   useEffect(() => {
-    // If the user is unauthenticated and not on the login page, redirect
+    if (status === "loading") return;
+
+    // Redirect unauthenticated users trying to access private routes
     if (
       status === "unauthenticated" &&
-      location !== "/api/auth/signin" &&
-      location !== "/"
+      location !== "/signup" &&
+      location !== "/" &&
+      location !== "/signin"
     ) {
-      router.push("/api/auth/signin");
+      router.push("/signin");
+    }
+
+    // Redirect authenticated users away from signin or signup pages
+    if (
+      status === "authenticated" &&
+      (location === "/signin" || location === "/signup")
+    ) {
+      router.push("/");
     }
   }, [status, location, router]);
 

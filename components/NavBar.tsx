@@ -9,17 +9,19 @@ import {
 } from "flowbite-react";
 import Image from "next/image";
 import LogoImage from "../public/logo.png";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function NavbarComponent() {
   const { status } = useSession();
+  const router = useRouter();
 
   return (
     <Navbar
       fluid
       className="dark:bg-bgDark border-b-1 border-white bg-lightContainer mb-12"
     >
-      <NavbarBrand>
+      <NavbarBrand href="/">
         <Image src={LogoImage.src} alt="logo" width={200} height={80} />
       </NavbarBrand>
       <NavbarToggle />
@@ -27,7 +29,10 @@ export default function NavbarComponent() {
         <NavbarLink href="/">Home</NavbarLink>
         <NavbarLink href="upload">Upload</NavbarLink>
         {status == "unauthenticated" ? (
-          <NavbarLink className="hover:cursor-pointer" onClick={() => signIn()}>
+          <NavbarLink
+            className="hover:cursor-pointer"
+            onClick={() => router.push("/signin")}
+          >
             Login
           </NavbarLink>
         ) : (
@@ -36,6 +41,14 @@ export default function NavbarComponent() {
             onClick={() => signOut()}
           >
             Logout
+          </NavbarLink>
+        )}
+        {status == "unauthenticated" && (
+          <NavbarLink
+            className="hover:cursor-pointer"
+            onClick={() => router.push("/signup")}
+          >
+            Sign Up
           </NavbarLink>
         )}
       </NavbarCollapse>
