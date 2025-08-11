@@ -5,6 +5,7 @@ import { useState } from "react";
 import ResumeTemplate from "./ResumeTemplate";
 import Link from "next/link";
 import * as Yup from "yup";
+import { saveResume } from "@/functions/apiFunctions";
 
 const initialResumeData: ResumeData = {
   name: "",
@@ -37,11 +38,12 @@ const initialResumeData: ResumeData = {
 };
 
 const ResumeUploadForm = (resume: ResumeData | null) => {
-  console.log("ENHANCED RESUME ", resume);
   const initialValues: ResumeData = resume || initialResumeData;
   const [step, setSteps] = useState<number>(1);
   const [downloadResume, setDownloadResume] = useState<ResumeData | null>(null);
   const [stepError, setStepError] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [save, setSave] = useState<boolean>(false);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -130,6 +132,20 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
     5: ["certifications", "hobbies", "languages"],
   };
 
+  const handleSave = async () => {
+    try {
+      await saveResume(downloadResume || initialValues);
+      setSave(true);
+    } catch (err) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        // @ts-expect-error: err.response may exist if this is an Axios error
+        setError(err.response?.data?.data);
+      } else {
+        setError(err instanceof Error ? err.message : "Signup failed");
+      }
+    }
+  };
+
   return (
     <div>
       {initialValues && (
@@ -140,7 +156,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
           validateOnBlur={true}
           validateOnChange={true}
           onSubmit={(values, actions) => {
-            console.log({ values });
             setDownloadResume({ ...values });
             actions.setSubmitting(false);
           }}
@@ -897,12 +912,21 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
 
               {downloadResume && (
                 <div className="flex flex-col  w-full justify-center items-center gap-12 mt-6">
+                  {error && <p className="text-red-500 mb-4">{error}</p>}
                   <PDFDownloadLink
                     document={<ResumeTemplate {...downloadResume} />}
                     fileName={`Resume ${initialValues.name}`}
                   >
                     <Button>Download your generated Resume</Button>
                   </PDFDownloadLink>
+
+                  <Button
+                    onClick={() => handleSave()}
+                    disabled={save}
+                    title={save ? "Resume saved successfully" : "Save Resume"}
+                  >
+                    {save ? "Resume saved successfully!" : "Save Resume"}
+                  </Button>
                   <Link href="/" className="text-blue-600 underline">
                     Go Back
                   </Link>

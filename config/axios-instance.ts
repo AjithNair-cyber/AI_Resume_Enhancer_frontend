@@ -18,6 +18,19 @@ if (session?.user?.accessToken) {
   return config;
 });
 
+// Add a response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => response, // Pass through on success
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Redirect to login page
+      window.location.href = "/signin"; 
+
+    }
+    return Promise.reject(error);
+  }
+);
+
 const getAxiosClient=()=>{
   return axiosInstance
 }

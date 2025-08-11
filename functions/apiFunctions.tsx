@@ -20,3 +20,13 @@ export const uploadResume = async (formdata: FormData): Promise<ResumeData> => {
   });
   return response.data?.data;
 };
+
+export const signUp = async (values: SignupFormValues): Promise<void> => {
+  const response = await axiosInstance.post("/signup", values);
+  return response.data;
+};
+
+export const saveResume = async (resume: ResumeData): Promise<void> => {
+  const response = await axiosInstance.post("/save", resume);
+  return response.data;
+};

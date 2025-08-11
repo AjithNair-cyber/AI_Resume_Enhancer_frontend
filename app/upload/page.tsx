@@ -6,6 +6,7 @@ import { FormikHelpers, Formik, Form, Field, ErrorMessage } from "formik";
 import ResumeUploadForm from "@/components/ResumeFileForm";
 import * as Yup from "yup";
 import Loader from "@/components/Loader";
+import { toast } from "react-toastify";
 
 const UploadPage = () => {
   const [enhancedResume, setEnhancedResume] = useState<ResumeData | null>(null);
@@ -13,7 +14,7 @@ const UploadPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errorFileMessage, setErrorFileMessage] = useState<string>("");
-
+  const [error, setError] = useState<string>("");
   const initialValues: ResumeFormValues = {
     job: "",
     resume: null,
@@ -40,13 +41,20 @@ const UploadPage = () => {
 
     try {
       setLoading(true);
+      setError("");
       const data = await uploadResume(formData);
+      toast.success("Resume uploaded successfully!");
       setEnhancedResume(data);
-      setLoading(false);
     } catch (err) {
       setLoading(true);
       setEnhancedResume(null);
-      console.log(err);
+      if (typeof err === "object" && err !== null && "response" in err) {
+        // @ts-expect-error: err.response may exist if this is an Axios error
+        setError(err.response?.data?.data);
+      } else {
+        setError(err instanceof Error ? err.message : "Signup failed");
+      }
+    } finally {
       setLoading(false);
     }
 
@@ -61,6 +69,7 @@ const UploadPage = () => {
   });
   return (
     <div>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       {!enhancedResume && (
         <Formik
           initialValues={initialValues}

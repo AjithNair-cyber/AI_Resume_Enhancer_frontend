@@ -7,21 +7,23 @@ const handler =  NextAuth({
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
+      id: "credentials",
       // `credentials` is used to generate a form on the sign in page.
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // Add logic here to look up the user from the credentials supplied
-        
+        console.log("Credentials:", credentials);
         let user
         try{
           const axiosInstance = getAxiosClient()
-          const res =  await axiosInstance.post("/login", { email : credentials?.username, password : credentials?.password})
+          const res =  await axiosInstance.post("/login", { email : credentials?.email, password : credentials?.password})
+          console.log(res)
           user = await res?.data?.data;
         } catch(err){
           console.log(err)
@@ -39,6 +41,10 @@ const handler =  NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/signin", // Displays signin buttons
+    error: "/signin", // Error code passed in query string as ?error=
+  },
   callbacks: {
     async jwt({ token, user }) {
       return { ...token, ...user };

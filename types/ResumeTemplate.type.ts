@@ -49,3 +49,10 @@ type ResumeData = {
   hobbies: string[];
   languages: string[];
 };
+
+type SignupFormValues = {
+  name: string;
+  email: string;
+  password: string;
+}
+

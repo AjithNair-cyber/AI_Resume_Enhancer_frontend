@@ -4,6 +4,7 @@ import { ThemeModeScript } from "flowbite-react";
 import { Analytics } from "@vercel/analytics/next";
 import Provider from "./Provider";
 import PrivateRoute from "@/components/HOCs/PrivateRoute";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({
   children,
@@ -28,6 +29,18 @@ export default function RootLayout({
           </PrivateRoute>
           {/* Navbar component is placed outside of PrivateRoute to ensure it is always rendered */}
           <Analytics />
+          <ToastContainer
+            position="bottom-center"
+            autoClose={700}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </Provider>
       </body>
     </html>
