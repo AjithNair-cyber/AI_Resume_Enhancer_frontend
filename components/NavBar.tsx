@@ -10,12 +10,13 @@ import {
 import Image from "next/image";
 import LogoImage from "../public/logo.png";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function NavbarComponent() {
   const { status } = useSession();
   const router = useRouter();
-
+  const pathName = usePathname();
+  console.log("Pathname:", pathName, "  ", pathName === "/resumes");
   return (
     <Navbar
       fluid
@@ -26,9 +27,15 @@ export default function NavbarComponent() {
       </NavbarBrand>
       <NavbarToggle />
       <NavbarCollapse>
-        <NavbarLink href="/">Home</NavbarLink>
-        <NavbarLink href="upload">Upload</NavbarLink>
-        <NavbarLink href="resumes">My Resumes</NavbarLink>
+        <NavbarLink href="/" active={pathName === "/"}>
+          Home
+        </NavbarLink>
+        <NavbarLink href="upload" active={pathName === "/upload"}>
+          Upload
+        </NavbarLink>
+        <NavbarLink href="resumes" active={pathName === "/resumes"}>
+          My Resumes
+        </NavbarLink>
         {status == "unauthenticated" ? (
           <NavbarLink
             className="hover:cursor-pointer"
