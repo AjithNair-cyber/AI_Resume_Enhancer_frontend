@@ -31,6 +31,19 @@ export const saveResume = async (resume: ResumeData): Promise<void> => {
   return response.data;
 };
 
+export const editResume = async (
+  resume: ResumeData,
+  resume_id: string
+): Promise<void> => {
+  const response = await axiosInstance.put(`/edit/${resume_id}`, resume);
+  return response.data;
+};
+
+export const deleteResume = async (resume_id: string): Promise<void> => {
+  const response = await axiosInstance.delete(`/delete/${resume_id}`);
+  return response.data;
+};
+
 export const getResumes = async (): Promise<ResumeData[]> => {
   const response = await axiosInstance.get("/resumes");
   return response.data?.data;
