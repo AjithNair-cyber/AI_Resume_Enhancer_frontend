@@ -30,3 +30,8 @@ export const saveResume = async (resume: ResumeData): Promise<void> => {
   const response = await axiosInstance.post("/save", resume);
   return response.data;
 };
+
+export const getResumes = async (): Promise<ResumeData[]> => {
+  const response = await axiosInstance.get("/resumes");
+  return response.data?.data;
+};

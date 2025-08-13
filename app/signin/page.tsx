@@ -24,7 +24,9 @@ const LoginPage = () => {
       .required("Required"),
   });
 
-  const handleSubmit = async (values: LoginFormValues) => {
+  const handleSubmit: (values: LoginFormValues) => Promise<void> = async (
+    values: LoginFormValues
+  ) => {
     const res = await signIn("credentials", {
       redirect: false,
       email: values.email,
@@ -37,7 +39,7 @@ const LoginPage = () => {
       toast.success("Login successful!");
       // Redirect to upload page after successful login
       setTimeout(() => {
-        router.push("/upload");
+        router.push("/");
       }, 500); // Redirect after login
     }
   };

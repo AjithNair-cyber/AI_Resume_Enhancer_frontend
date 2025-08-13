@@ -22,7 +22,7 @@ const SignupPage = () => {
       .required("Required"),
   });
 
-  const handleSubmit = async (values: SignupFormValues) => {
+  const handleSubmit = async (values: SignupFormValues): Promise<void> => {
     try {
       // Send values to your backend here
       await signUp(values);

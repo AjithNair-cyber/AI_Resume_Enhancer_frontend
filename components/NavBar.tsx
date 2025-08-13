@@ -28,6 +28,7 @@ export default function NavbarComponent() {
       <NavbarCollapse>
         <NavbarLink href="/">Home</NavbarLink>
         <NavbarLink href="upload">Upload</NavbarLink>
+        <NavbarLink href="resumes">My Resumes</NavbarLink>
         {status == "unauthenticated" ? (
           <NavbarLink
             className="hover:cursor-pointer"
