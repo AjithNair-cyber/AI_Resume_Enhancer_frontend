@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getSession } from 'next-auth/react';
+import { signOut } from "next-auth/react";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "https://ai-python-dmf6acdgaph4gqhy.canadacentral-01.azurewebsites.net",
@@ -24,7 +25,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Redirect to login page
-      window.location.href = "/signin"; 
+      signOut({ callbackUrl: '/signin' }); 
 
     }
     return Promise.reject(error);
