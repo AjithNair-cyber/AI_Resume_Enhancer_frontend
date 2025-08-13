@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getResumes } from "@/functions/apiFunctions";
+import { deleteResume, getResumes } from "@/functions/apiFunctions";
 import {
   useReactTable,
   createColumnHelper,
@@ -13,12 +13,14 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import ResumeTemplate from "@/components/ResumeTemplate";
 import { Button } from "flowbite-react";
 import { toast } from "react-toastify";
+import ResumeUploadForm from "@/components/ResumeFileForm";
 
 const columnHelper = createColumnHelper<ResumeData>();
 
 export default function ResumePage() {
   const [resumes, setResumes] = useState<ResumeData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [edit, setIsEdit] = useState<ResumeData | null>(null);
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -54,7 +56,7 @@ export default function ResumePage() {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("created_at", {
-      header: "Created Time",
+      header: "Created Date",
       cell: (info) => {
         const date = new Date(info.getValue() as string);
         if (date.toLocaleDateString() === "Invalid Date") {
@@ -74,6 +76,10 @@ export default function ResumePage() {
           >
             <Button color="green">Download</Button>
           </PDFDownloadLink>
+          <Button onClick={() => setIsEdit(info.row.original)}>Edit</Button>
+          <Button onClick={handleDelete(info.row.original._id)} color="red">
+            Delete
+          </Button>
         </div>
       ),
     }),
@@ -84,53 +90,77 @@ export default function ResumePage() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  console.log(loading);
+
+  const handleDelete = (resumeId: string) => async () => {
+    if (confirm("Are you sure you want to delete this resume?")) {
+      try {
+        setLoading(true);
+        await deleteResume(resumeId);
+        setResumes((prev) => prev.filter((resume) => resume._id !== resumeId));
+        toast.success("Resume deleted successfully");
+      } catch (error) {
+        console.error("Error deleting resume:", error);
+        toast.error("Failed to delete resume");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <div className="flex flex-col justify-center items-center overflow-x-auto w-full max-w-full">
-      <h1 className="text-3xl pb-8 font-semibold">My Resumes</h1>
-      {resumes.length === 0 ? (
-        <div className="text-center text-gray-500">
-          No resumes saved. Please upload and save a resume.
+    <div>
+      {!edit && (
+        <div className="flex flex-col justify-center items-center overflow-x-auto w-full max-w-full">
+          <h1 className="text-3xl pb-8 font-semibold">My Resumes</h1>
+          {resumes.length === 0 ? (
+            <div className="text-center text-gray-500">
+              No resumes saved. Please upload and save a resume.
+            </div>
+          ) : (
+            <table className="border bg-white dark:bg-slate-800 w-7/8 rounded-md overflow-hidden shadow-md">
+              <thead className="bg-gray-100">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        key={header.id}
+                        className="border bg-white dark:bg-slate-900 border-gray-300 px-4 py-2 text-left"
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row, index) => (
+                  <tr key={index} className="">
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
-      ) : (
-        <table className="border bg-white dark:bg-slate-800 w-7/8 rounded-md overflow-hidden shadow-md">
-          <thead className="bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="border bg-white dark:bg-slate-900 border-gray-300 px-4 py-2 text-left"
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row, index) => (
-              <tr key={index} className="">
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="border border-gray-300 px-4 py-2"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
       )}
+      {edit && <ResumeUploadForm {...edit} />}
     </div>
   );
 }

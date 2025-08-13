@@ -18,12 +18,11 @@ const handler =  NextAuth({
       },
       async authorize(credentials) {
         // Add logic here to look up the user from the credentials supplied
-        console.log("Credentials:", credentials);
+
         let user
         try{
           const axiosInstance = getAxiosClient()
           const res =  await axiosInstance.post("/login", { email : credentials?.email, password : credentials?.password})
-          console.log(res)
           user = await res?.data?.data;
         } catch(err){
           console.log(err)

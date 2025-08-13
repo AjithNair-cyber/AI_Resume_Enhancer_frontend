@@ -16,7 +16,6 @@ export default function NavbarComponent() {
   const { status } = useSession();
   const router = useRouter();
   const pathName = usePathname();
-  console.log("Pathname:", pathName, "  ", pathName === "/resumes");
   return (
     <Navbar
       fluid

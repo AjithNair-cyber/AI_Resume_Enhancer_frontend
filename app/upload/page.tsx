@@ -31,7 +31,6 @@ const UploadPage = () => {
       return;
     }
     if (resumeFile?.type !== "application/pdf") {
-      console.log(resumeFile?.type);
       setErrorFileMessage("Please upload a file with valid file type (.pdf)");
       return;
     }

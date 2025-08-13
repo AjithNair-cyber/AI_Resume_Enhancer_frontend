@@ -5,7 +5,7 @@ import { useState } from "react";
 import ResumeTemplate from "./ResumeTemplate";
 import Link from "next/link";
 import * as Yup from "yup";
-import { saveResume } from "@/functions/apiFunctions";
+import { editResume, saveResume } from "@/functions/apiFunctions";
 import { toast } from "react-toastify";
 
 const initialResumeData: ResumeData = {
@@ -37,6 +37,7 @@ const initialResumeData: ResumeData = {
   hobbies: [""],
   languages: [""],
   created_at: "",
+  _id: "",
 };
 
 const ResumeUploadForm = (resume: ResumeData | null) => {
@@ -133,11 +134,16 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
     5: ["certifications", "hobbies", "languages"],
   };
 
-  const handleSave = async () => {
+  const handleSubmit = async () => {
     try {
       setSave(true);
-      await saveResume(downloadResume || initialValues);
-      toast.success("Resume saved successfully!");
+      if (resume?._id) {
+        await editResume(downloadResume || initialValues, resume._id);
+        window.location.reload();
+      } else {
+        await saveResume(downloadResume || initialValues);
+      }
+      toast.success(`Resume ${resume?._id ? "edited" : "saved"} successfully!`);
     } catch (err) {
       if (typeof err === "object" && err !== null && "response" in err) {
         // @ts-expect-error: err.response may exist if this is an Axios error
@@ -862,7 +868,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                           );
 
                           if (stepHasError) {
-                            console.log(allErrors);
                             setStepError(
                               "Please fill all the mandatory fields marked with * in this step before continuing."
                             );
@@ -888,7 +893,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                         );
 
                         if (stepHasError) {
-                          console.log(allErrors);
                           setStepError(
                             "Please fill all the mandatory fields marked with * in this step before continuing."
                           );
@@ -914,7 +918,7 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
               )}
 
               {downloadResume && (
-                <div className="flex flex-col  w-full justify-center items-center gap-12 mt-6">
+                <div className="flex flex-col w-full justify-center items-center gap-12 mt-6">
                   <PDFDownloadLink
                     document={<ResumeTemplate {...downloadResume} />}
                     fileName={`Resume ${initialValues.name}`}
@@ -923,11 +927,25 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
                   </PDFDownloadLink>
 
                   <Button
-                    onClick={() => handleSave()}
+                    onClick={() => handleSubmit()}
                     disabled={save}
-                    title={save ? "Resume saved successfully" : "Save Resume"}
+                    title={
+                      save
+                        ? resume?._id
+                          ? "Resume edited successfully"
+                          : "Resume saved successfully"
+                        : resume?._id
+                        ? "Save Edited Resume"
+                        : "Save Resume"
+                    }
                   >
-                    {save ? "Resume saved successfully!" : "Save Resume"}
+                    {save
+                      ? resume?._id
+                        ? "Resume edited successfully"
+                        : "Resume saved successfully"
+                      : resume?._id
+                      ? "Save Edited Resume"
+                      : "Save Resume"}
                   </Button>
                   <Link href="/" className="text-blue-600 underline">
                     Go Back
