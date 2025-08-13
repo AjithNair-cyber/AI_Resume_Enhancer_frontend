@@ -39,6 +39,7 @@ export default function NavbarComponent() {
         {status == "unauthenticated" ? (
           <NavbarLink
             className="hover:cursor-pointer"
+            active={pathName === "/signin"}
             onClick={() => router.push("/signin")}
           >
             Login
@@ -54,6 +55,7 @@ export default function NavbarComponent() {
         {status == "unauthenticated" && (
           <NavbarLink
             className="hover:cursor-pointer"
+            active={pathName === "/signup"}
             onClick={() => router.push("/signup")}
           >
             Sign Up
