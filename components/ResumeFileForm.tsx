@@ -36,6 +36,7 @@ const initialResumeData: ResumeData = {
   ],
   hobbies: [""],
   languages: [""],
+  created_at: "",
 };
 
 const ResumeUploadForm = (resume: ResumeData | null) => {

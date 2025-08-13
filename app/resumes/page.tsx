@@ -51,6 +51,16 @@ export default function ResumePage() {
       header: "Job Role",
       cell: (info) => info.getValue(),
     }),
+    columnHelper.accessor("created_at", {
+      header: "Created Time",
+      cell: (info) => {
+        const date = new Date(info.getValue() as string);
+        if (date.toLocaleDateString() === "Invalid Date") {
+          return "N/A"; // Handle invalid date
+        }
+        return date.toLocaleDateString("en-GB"); // Shows only date
+      },
+    }),
     columnHelper.display({
       id: "actions",
       header: "Download",
@@ -82,7 +92,7 @@ export default function ResumePage() {
       <h1 className="text-3xl pb-8 font-semibold">My Resumes</h1>
       {resumes.length === 0 ? (
         <div className="text-center text-gray-500">
-          No resumes saved. Please upload a resume.
+          No resumes saved. Please upload and save a resume.
         </div>
       ) : (
         <table className="border bg-white dark:bg-slate-800 w-7/8 rounded-md overflow-hidden shadow-md">

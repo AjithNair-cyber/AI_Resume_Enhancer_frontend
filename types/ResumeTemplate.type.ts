@@ -48,6 +48,7 @@ type ResumeData = {
   certifications: Certification[];
   hobbies: string[];
   languages: string[];
+  created_at: string;
 };
 
 type SignupFormValues = {
