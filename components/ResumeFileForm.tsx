@@ -36,6 +36,7 @@ const initialResumeData: ResumeData = {
   ],
   hobbies: [""],
   languages: [""],
+  created_at: "",
 };
 
 const ResumeUploadForm = (resume: ResumeData | null) => {
@@ -134,9 +135,9 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
 
   const handleSave = async () => {
     try {
+      setSave(true);
       await saveResume(downloadResume || initialValues);
       toast.success("Resume saved successfully!");
-      setSave(true);
     } catch (err) {
       if (typeof err === "object" && err !== null && "response" in err) {
         // @ts-expect-error: err.response may exist if this is an Axios error
