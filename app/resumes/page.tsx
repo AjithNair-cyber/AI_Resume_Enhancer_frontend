@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ResumeTemplate from "@/components/ResumeTemplate";
 import { Button } from "flowbite-react";
+import { toast } from "react-toastify";
 
 const columnHelper = createColumnHelper<ResumeData>();
 
@@ -20,17 +21,18 @@ export default function ResumePage() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       const response = await getResumes();
+      setLoading(false);
       setResumes(response);
     };
-    setLoading(true);
     try {
       getData();
     } catch (error) {
+      setLoading(false);
+      toast.error("Failed to fetch resumes");
       console.error("Error fetching resumes:", error);
-    } finally {
     }
-    setLoading(false);
   }, []);
 
   const columns = [
@@ -82,7 +84,7 @@ export default function ResumePage() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
+  console.log(loading);
   if (loading) {
     return <Loader />;
   }
