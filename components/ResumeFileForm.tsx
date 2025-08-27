@@ -180,8 +180,6 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
           {({ values, validateForm, errors }) => (
             <Form className="w-7/8 mx-auto my-6 p-12 bg-white dark:bg-slate-800 rounded shadow ">
               {/* Step Progress Bar */}
-
-              {/* Step Progress Bar */}
               <div className="flex items-center justify-between mb-8">
                 {stepLabels.map((label, index) => {
                   const s = index + 1;
