@@ -113,9 +113,19 @@ export default function ResumePage() {
 
   return (
     <div>
+      <h1 className="text-3xl pb-8 font-semibold justify-center flex items-center">
+        My Resumes
+      </h1>
+      {edit && (
+        <div className="justify-center flex items-center">
+          {" "}
+          <Button onClick={() => setIsEdit(null)} className="ml-4">
+            Back to list
+          </Button>
+        </div>
+      )}
       {!edit && (
         <div className="flex flex-col justify-center items-center overflow-x-auto w-full max-w-full">
-          <h1 className="text-3xl pb-8 font-semibold">My Resumes</h1>
           {resumes.length === 0 ? (
             <div className="text-center text-gray-500">
               No resumes saved. Please upload and save a resume.
@@ -160,7 +170,11 @@ export default function ResumePage() {
           )}
         </div>
       )}
-      {edit && <ResumeUploadForm {...edit} />}
+      {edit && (
+        <div>
+          <ResumeUploadForm {...edit} />{" "}
+        </div>
+      )}
     </div>
   );
 }
