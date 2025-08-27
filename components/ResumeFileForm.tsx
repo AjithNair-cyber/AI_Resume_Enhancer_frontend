@@ -46,6 +46,13 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
   const [downloadResume, setDownloadResume] = useState<ResumeData | null>(null);
   const [stepError, setStepError] = useState<string>("");
   const [save, setSave] = useState<boolean>(false);
+  const stepLabels = [
+    "Personal",
+    "Experience",
+    "Projects",
+    "Skills & Education",
+    "Extras",
+  ];
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -172,6 +179,48 @@ const ResumeUploadForm = (resume: ResumeData | null) => {
         >
           {({ values, validateForm, errors }) => (
             <Form className="w-7/8 mx-auto my-6 p-12 bg-white dark:bg-slate-800 rounded shadow ">
+              {/* Step Progress Bar */}
+
+              {/* Step Progress Bar */}
+              <div className="flex items-center justify-between mb-8">
+                {stepLabels.map((label, index) => {
+                  const s = index + 1;
+                  return (
+                    <div
+                      key={s}
+                      className="flex-1 flex flex-col items-center cursor-pointer"
+                      onClick={async () => {
+                        const errors = await validateForm();
+                        if (Object.keys(errors).length === 0 || s < step) {
+                          setSteps(s); // allow moving back always, forward only if valid
+                        } else {
+                          toast.error(
+                            "Please fill all required fields in the current step before proceeding."
+                          );
+                        }
+                      }}
+                    >
+                      {/* Circle */}
+                      <div
+                        className={`flex items-center justify-center w-10 h-10 rounded-full text-white font-bold transition-colors
+            ${s <= step ? "bg-blue-600" : "bg-gray-300"}`}
+                      >
+                        {s}
+                      </div>
+
+                      {/* Label */}
+                      <p
+                        className={`mt-2 text-sm font-medium ${
+                          s === step ? "text-blue-600" : "text-gray-500"
+                        }`}
+                      >
+                        {label}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+
               <h1 className="text-2xl font-bold mb-4">Resume Builder</h1>
               {!downloadResume && step == 1 ? (
                 <div className="space-y-4">
