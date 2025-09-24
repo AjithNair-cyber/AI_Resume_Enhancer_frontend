@@ -1,20 +1,20 @@
 import axios from "axios";
-import { getSession } from 'next-auth/react';
+import { getSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://ai-python-dmf6acdgaph4gqhy.canadacentral-01.azurewebsites.net",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-  }
-})
+  },
+});
 
 // In request interceptor
 axiosInstance.interceptors.request.use(async (config) => {
   const session = await getSession();
-if (session?.user?.accessToken) {
-    config.headers['Authorization'] = `Bearer ${session.user.accessToken}`;
+  if (session?.user?.accessToken) {
+    config.headers["Authorization"] = `Bearer ${session.user.accessToken}`;
   }
   return config;
 });
@@ -25,15 +25,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Redirect to login page
-      signOut({ callbackUrl: '/signin' }); 
-
+      signOut({ callbackUrl: "/signin" });
     }
     return Promise.reject(error);
   }
 );
 
-const getAxiosClient=()=>{
-  return axiosInstance
-}
+const getAxiosClient = () => {
+  return axiosInstance;
+};
 
 export default getAxiosClient;
